@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Surveillance Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Surveillance System</title>
 </head>
 <body>
-    <div id="dashboard">
-        <h1>Surveillance Monitoring Dashboard</h1>
-        <div id="real-time-monitoring"></div>
-        <script src="app.js"></script>
-    </div>
+    <header>
+        <h1>Surveillance System Dashboard</h1>
+    </header>
+    <main>
+        <section id="video-feed">
+            <h2>Video Feed</h2>
+            <video id="video" autoplay></video>
+        </section>
+        <section id="alerts">
+            <h2>Alerts</h2>
+            <ul id="alerts-list"></ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Surveillance System</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
