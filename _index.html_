@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveilans PKM Cibuntu Bandung</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-video"></i>
+            <span>SurveilansPKM</span>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li><a href="#dashboard" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#monitoring"><i class="fas fa-camera"></i> Live Monitoring</a></li>
+                <li><a href="#reports"><i class="fas fa-file-pdf"></i> Laporan</a></li>
+                <li><a href="#users"><i class="fas fa-users"></i> Manajemen Pengguna</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Pengaturan</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Dashboard Surveilans</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Cari...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-profile">
+                    <img src="assets/avatar.jpg" alt="User">
+                    <div class="user-info">
+                        <p class="name">Admin User</p>
+                        <p class="status">Online</p>
+                    </div>
+                    <button class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-camera"></i></div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Kamera</p>
+                            <p class="stat-value">8</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-content">
+                            <p class="stat-label">Alert Aktif</p>
+                            <p class="stat-value">2</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="stat-content">
+                            <p class="stat-label">User Online</p>
+                            <p class="stat-value">5</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-database"></i></div>
+                        <div class="stat-content">
+                            <p class="stat-label">Storage Used</p>
+                            <p class="stat-value">456 GB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <h3>Activity Over Time</h3>
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Alert Distribution</h3>
+                        <canvas id="alertChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="recent-alerts">
+                    <h3>Alert Terbaru</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>Kamera</th>
+                                <th>Tipe Alert</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alertsTable">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Live Monitoring Section -->
+            <section id="monitoring" class="page">
+                <div class="camera-grid">
+                    <div class="camera-feed">
+                        <div class="video-container">
+                            <video id="camera1" controls></video>
+                        </div>
+                        <div class="camera-info">
+                            <h4>Kamera 1 - Pintu Masuk</h4>
+                            <p class="status-online">● Online</p>
+                        </div>
+                    </div>
+                    <div class="camera-feed">
+                        <div class="video-container">
+                            <video id="camera2" controls></video>
+                        </div>
+                        <div class="camera-info">
+                            <h4>Kamera 2 - Area Parkir</h4>
+                            <p class="status-online">● Online</p>
+                        </div>
+                    </div>
+                    <div class="camera-feed">
+                        <div class="video-container">
+                            <video id="camera3" controls></video>
+                        </div>
+                        <div class="camera-info">
+                            <h4>Kamera 3 - Ruang Kerja</h4>
+                            <p class="status-online">● Online</p>
+                        </div>
+                    </div>
+                    <div class="camera-feed">
+                        <div class="video-container">
+                            <video id="camera4" controls></video>
+                        </div>
+                        <div class="camera-info">
+                            <h4>Kamera 4 - Area Gudang</h4>
+                            <p class="status-offline">● Offline</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="page">
+                <div class="reports-header">
+                    <h2>Laporan Surveilans</h2>
+                    <div class="report-filters">
+                        <input type="date" id="reportStart">
+                        <input type="date" id="reportEnd">
+                        <button class="btn-primary">Generate Report</button>
+                        <button class="btn-secondary"><i class="fas fa-download"></i> Export PDF</button>
+                    </div>
+                </div>
+                <div class="report-content" id="reportContent">
+                    <!-- Dynamic content -->
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section id="users" class="page">
+                <div class="users-header">
+                    <h2>Manajemen Pengguna</h2>
+                    <button class="btn-primary" id="addUserBtn">+ Tambah Pengguna</button>
+                </div>
+                <div class="users-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="page">
+                <div class="settings-container">
+                    <h2>Pengaturan Sistem</h2>
+                    <form id="settingsForm">
+                        <div class="setting-group">
+                            <label>Sistem Notifikasi</label>
+                            <input type="checkbox" id="emailNotif"> Email
+                            <input type="checkbox" id="smsNotif"> SMS
+                            <input type="checkbox" id="pushNotif"> Push Notification
+                        </div>
+                        <div class="setting-group">
+                            <label>Retensi Data</label>
+                            <select id="dataRetention">
+                                <option value="30">30 Hari</option>
+                                <option value="60">60 Hari</option>
+                                <option value="90">90 Hari</option>
+                                <option value="180">6 Bulan</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Simpan Pengaturan</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Tambah Pengguna Baru</h2>
+            <form id="userForm">
+                <input type="text" placeholder="Nama Lengkap" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <select required>
+                    <option>Admin</option>
+                    <option>Operator</option>
+                    <option>Viewer</option>
+                </select>
+                <button type="submit" class="btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
