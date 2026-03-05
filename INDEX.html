@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Surveilans Puskesmas</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6f8}
+    header{background:#1b5e20;color:white;padding:20px}
+    header h1{margin:0;font-size:22px}
+
+    .container{padding:20px}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
+
+    .card{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+
+    .card h3{margin:0;font-size:14px;color:#666}
+
+    .card p{font-size:28px;margin:5px 0 0;font-weight:bold}
+
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+
+    .panel{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+
+    table{width:100%;border-collapse:collapse}
+
+    th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+
+    footer{margin-top:30px;text-align:center;padding:15px;color:#777}
+
+    @media(max-width:900px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Sistem Informasi Surveilans - Puskesmas</h1>
+</header>
+
+<div class="container">
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Kasus DBD</h3>
+      <p>19</p>
+    </div>
+
+    <div class="card">
+      <h3>Kasus TBC</h3>
+      <p>45</p>
+    </div>
+
+    <div class="card">
+      <h3>Kasus Diare</h3>
+      <p>32</p>
+    </div>
+
+    <div class="card">
+      <h3>Zoonosis</h3>
+      <p>4</p>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="panel">
+      <h3>Tren Kasus Penyakit</h3>
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="panel">
+      <h3>Peringatan Surveilans</h3>
+      <ul>
+        <li>Kasus DBD meningkat minggu ini</li>
+        <li>Kasus diare ditemukan di Desa C</li>
+        <li>PE DBD masih belum optimal</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="panel" style="margin-top:20px">
+
+    <h3>Laporan Surveilans</h3>
+
+    <table>
+
+      <tr>
+        <th>Bulan</th>
+        <th>Laporan</th>
+      </tr>
+
+      <tr>
+        <td>Januari</td>
+        <td>Download</td>
+      </tr>
+
+      <tr>
+        <td>Februari</td>
+        <td>Download</td>
+      </tr>
+
+      <tr>
+        <td>Maret</td>
+        <td>Download</td>
+      </tr>
+
+    </table>
+
+  </div>
+
+</div>
+
+<footer>
+  Dashboard Surveilans Puskesmas
+</footer>
+
+<script>
+
+const ctx=document.getElementById('chart');
+
+new Chart(ctx,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun'],datasets:[{label:'DBD',data:[2,3,5,4,3,2]},{label:'TBC',data:[5,6,7,5,6,8]},{label:'Diare',data:[3,4,2,5,4,3]}]}});
+
+</script>
+
+</body>
+</html>
