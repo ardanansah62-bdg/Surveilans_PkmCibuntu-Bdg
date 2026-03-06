@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
     .sidebar-item { transition: all 0.2s ease; }
@@ -32,26 +33,22 @@
   <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full bg-slate-50 overflow-auto">
-  <div id="app" class="h-full w-full flex">
-   <!-- Toast Container -->
+  <div id="app" class="h-full w-full flex"><!-- Toast Container -->
    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div><!-- Login Screen -->
    <div id="login-screen" class="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 fade-in">
      <div class="text-center mb-8">
       <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-       <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+       <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
        </svg>
       </div>
       <h1 id="login-title" class="text-2xl font-bold text-slate-800">Sistem Laporan CKG</h1>
       <p id="login-subtitle" class="text-slate-500 mt-1">UPTD Puskesmas Cibuntu</p>
      </div>
      <div class="space-y-4">
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Username</label> <input type="text" id="login-username" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Masukkan username">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Username</label> <input type="text" id="login-username" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Masukkan username">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Password</label> <input type="password" id="login-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Masukkan password">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Password</label> <input type="password" id="login-password" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Masukkan password">
       </div><button onclick="handleLogin()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200"> Masuk </button>
      </div>
      <div class="mt-6 p-4 bg-slate-50 rounded-xl">
@@ -64,14 +61,12 @@
      </div>
     </div>
    </div><!-- Main Application -->
-   <div id="main-app" class="hidden w-full h-full flex">
-    <!-- Sidebar -->
+   <div id="main-app" class="hidden w-full h-full flex"><!-- Sidebar -->
     <aside class="w-64 bg-gradient-to-b from-slate-800 to-slate-900 text-white flex-shrink-0 flex flex-col">
      <div class="p-5 border-b border-slate-700">
       <div class="flex items-center gap-3">
        <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
        </div>
        <div>
@@ -80,27 +75,33 @@
        </div>
       </div>
      </div>
-     <nav class="flex-1 p-4 space-y-1 overflow-auto">
-      <button onclick="showPage('dashboard')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="dashboard">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+     <nav class="flex-1 p-4 space-y-1 overflow-auto"><button onclick="showPage('dashboard')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="dashboard">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
        </svg><span class="text-sm font-medium">Dashboard</span> </button> <button onclick="showPage('input')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="input">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-       </svg><span class="text-sm font-medium">Input Pemeriksaan</span> </button> <button onclick="showPage('upload')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="upload">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-       </svg><span class="text-sm font-medium">Upload Data</span> </button> <button onclick="showPage('data')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="data">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+       </svg><span class="text-sm font-medium">Input Pemeriksaan</span> </button> <button onclick="showPage('data')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="data">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
        </svg><span class="text-sm font-medium">Data Pemeriksaan</span> </button> <button onclick="showPage('wilayah')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="wilayah">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-       </svg><span class="text-sm font-medium">Data Wilayah</span> </button> <button onclick="showPage('settings')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="settings">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-       </svg><span class="text-sm font-medium">Pengaturan Target</span> </button> <button onclick="showPage('laporan')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="laporan">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+       </svg><span class="text-sm font-medium">Data Wilayah</span> </button> <button onclick="showPage('laporan')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="laporan">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
        </svg><span class="text-sm font-medium">Laporan</span> </button> <button onclick="showPage('monitoring')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="monitoring">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
        </svg><span class="text-sm font-medium">Monitoring</span> </button> <button onclick="showPage('export')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="export">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-       </svg><span class="text-sm font-medium">Export Data</span> </button> <button onclick="showPage('users')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50 admin-only" data-page="users">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+       </svg><span class="text-sm font-medium">Export Data</span> </button> <button onclick="showPage('upload')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50" data-page="upload">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-5l-4-4m0 0l-4 4m4-4v12" />
+       </svg><span class="text-sm font-medium">Upload Excel</span> </button> <button onclick="showPage('users')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-slate-700/50 admin-only" data-page="users">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
        </svg><span class="text-sm font-medium">Manajemen User</span> </button>
      </nav>
      <div class="p-4 border-t border-slate-700">
@@ -113,16 +114,21 @@
         <p class="text-xs text-slate-400" id="user-role">Administrator</p>
        </div>
       </div><button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition text-sm">
-       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
        </svg> Keluar </button>
      </div>
     </aside><!-- Main Content -->
-    <main class="flex-1 overflow-auto">
-     <!-- Dashboard Page -->
+    <main class="flex-1 overflow-auto"><!-- Dashboard Page -->
      <div id="page-dashboard" class="page p-6 fade-in">
-      <div class="mb-6">
-       <h1 class="text-2xl font-bold text-slate-800">Dashboard</h1>
-       <p class="text-slate-500">Ringkasan Capaian Program Cek Kesehatan Gratis</p>
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+       <div>
+        <h1 class="text-2xl font-bold text-slate-800">Dashboard</h1>
+        <p class="text-slate-500">Ringkasan Capaian Program Cek Kesehatan Gratis</p>
+       </div><button id="btn-edit-target-dashboard" onclick="openTargetModal()" class="admin-only hidden px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg> Edit Sasaran &amp; Target </button>
       </div><!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
        <div class="card-hover stat-card rounded-2xl p-5 text-white shadow-lg" style="--card-start: #10b981; --card-end: #059669;">
@@ -132,7 +138,8 @@
           <p class="text-3xl font-bold mt-1" id="stat-sasaran">15,000</p>
          </div>
          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
          </div>
         </div>
@@ -144,7 +151,8 @@
           <p class="text-3xl font-bold mt-1" id="stat-target">10,000</p>
          </div>
          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
           </svg>
          </div>
         </div>
@@ -156,7 +164,8 @@
           <p class="text-3xl font-bold mt-1" id="stat-realisasi">0</p>
          </div>
          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
           </svg>
          </div>
         </div>
@@ -168,7 +177,8 @@
           <p class="text-3xl font-bold mt-1" id="stat-persentase">0%</p>
          </div>
          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>
          </div>
         </div>
@@ -196,45 +206,31 @@
       </div>
       <div class="bg-white rounded-2xl shadow-sm p-6">
        <form id="form-pemeriksaan" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Kegiatan <span class="text-red-500">*</span></label> <input type="date" id="inp-tanggal" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Kegiatan <span class="text-red-500">*</span></label> <input type="date" id="inp-tanggal" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label> <input type="text" id="inp-nama" required placeholder="Masukkan nama lengkap" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label> <input type="text" id="inp-nama" required placeholder="Masukkan nama lengkap" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">NIK <span class="text-red-500">*</span></label> <input type="text" id="inp-nik" required maxlength="16" placeholder="16 digit NIK" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">NIK <span class="text-red-500">*</span></label> <input type="text" id="inp-nik" required maxlength="16" placeholder="16 digit NIK" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label> <input type="date" id="inp-tgl-lahir" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir <span class="text-red-500">*</span></label> <input type="date" id="inp-tgl-lahir" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Umur</label> <input type="text" id="inp-umur" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Umur</label> <input type="text" id="inp-umur" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Kelompok Usia</label> <input type="text" id="inp-kelompok-usia" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label> <select id="inp-jk" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih jenis kelamin</option> <option value="Laki-laki">Laki-laki</option> <option value="Perempuan">Perempuan</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label> <select id="inp-jk" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih jenis kelamin</option> <option value="Laki-laki">Laki-laki</option> <option value="Perempuan">Perempuan</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan <span class="text-red-500">*</span></label> <select id="inp-kelurahan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih kelurahan</option> <option value="Caringin">Kelurahan Caringin</option> <option value="Cibuntu">Kelurahan Cibuntu</option> <option value="Warung Muncang">Kelurahan Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan <span class="text-red-500">*</span></label> <select id="inp-kelurahan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih kelurahan</option> <option value="Caringin">Kelurahan Caringin</option> <option value="Cibuntu">Kelurahan Cibuntu</option> <option value="Warung Muncang">Kelurahan Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">RW <span class="text-red-500">*</span></label> <select id="inp-rw" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih RW</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">RW <span class="text-red-500">*</span></label> <select id="inp-rw" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Pilih RW</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Konfirmasi Kehadiran</label> <select id="inp-kehadiran" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Hadir">Belum Hadir</option> <option value="Sudah Hadir">Sudah Hadir</option> <option value="Tidak Hadir">Tidak Hadir</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Konfirmasi Kehadiran</label> <select id="inp-kehadiran" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Hadir">Belum Hadir</option> <option value="Sudah Hadir">Sudah Hadir</option> <option value="Tidak Hadir">Tidak Hadir</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Skrining Mandiri</label> <select id="inp-skrining" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum">Belum</option> <option value="Lengkap">Lengkap</option> <option value="Tidak Lengkap">Tidak Lengkap</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Skrining Mandiri</label> <select id="inp-skrining" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum">Belum</option> <option value="Lengkap">Lengkap</option> <option value="Tidak Lengkap">Tidak Lengkap</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Status Pelayanan</label> <select id="inp-pelayanan" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Pemeriksaan">Belum Pemeriksaan</option> <option value="Sedang Pemeriksaan">Sedang Pemeriksaan</option> <option value="Selesai Pemeriksaan">Selesai Pemeriksaan</option> </select>
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Status Pelayanan</label> <select id="inp-pelayanan" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Pemeriksaan">Belum Pemeriksaan</option> <option value="Sedang Pemeriksaan">Sedang Pemeriksaan</option> <option value="Selesai Pemeriksaan">Selesai Pemeriksaan</option> </select>
-        </div>
-        <div class="md:col-span-2 lg:col-span-3 flex gap-3 mt-4">
-         <button type="submit" id="btn-submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200 flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        <div class="md:col-span-2 lg:col-span-3 flex gap-3 mt-4"><button type="submit" id="btn-submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg> Simpan Data </button> <button type="button" onclick="resetForm()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Reset </button>
         </div>
        </form>
@@ -246,8 +242,7 @@
         <h1 class="text-2xl font-bold text-slate-800">Data Pemeriksaan</h1>
         <p class="text-slate-500">Kelola data peserta CKG</p>
        </div>
-       <div class="flex gap-2">
-        <input type="text" id="search-data" placeholder="Cari nama/NIK..." class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition w-64"> <select id="filter-kelurahan" class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Semua Kelurahan</option> <option value="Caringin">Caringin</option> <option value="Cibuntu">Cibuntu</option> <option value="Warung Muncang">Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
+       <div class="flex gap-2"><input type="text" id="search-data" placeholder="Cari nama/NIK..." class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition w-64"> <select id="filter-kelurahan" class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Semua Kelurahan</option> <option value="Caringin">Caringin</option> <option value="Cibuntu">Cibuntu</option> <option value="Warung Muncang">Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
        </div>
       </div>
       <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -275,81 +270,18 @@
         </table>
        </div>
       </div>
-     </div><!-- Upload Page -->
-     <div id="page-upload" class="page hidden p-6 fade-in">
-      <div class="mb-6">
-       <h1 class="text-2xl font-bold text-slate-800">Upload Data Pemeriksaan</h1>
-       <p class="text-slate-500">Upload data pemeriksaan dari file Excel (format: .xlsx)</p>
-      </div>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-       <div class="lg:col-span-2">
-        <div class="bg-white rounded-2xl shadow-sm p-8 border-2 border-dashed border-slate-200 hover:border-emerald-500 transition cursor-pointer" id="drop-zone" onclick="document.getElementById('file-input').click()">
-         <div class="text-center">
-          <svg class="w-12 h-12 text-slate-400 mx-auto mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <p class="text-slate-700 font-medium mb-1">Seret file Excel ke sini atau klik untuk memilih</p>
-          <p class="text-slate-500 text-sm">Format: .xlsx dengan kolom: Tanggal, Nama, NIK, Tgl Lahir, JK, Kelurahan, RW</p>
-         </div><input type="file" id="file-input" accept=".xlsx" class="hidden" onchange="handleFileUpload(event)">
-        </div>
-        <div class="mt-6">
-         <h3 class="font-semibold text-slate-800 mb-3">Contoh Format:</h3>
-         <div class="overflow-x-auto bg-white rounded-2xl shadow-sm">
-          <table class="w-full text-sm">
-           <thead class="bg-slate-50">
-            <tr>
-             <th class="px-4 py-2 text-left">Tanggal</th>
-             <th class="px-4 py-2 text-left">Nama</th>
-             <th class="px-4 py-2 text-left">NIK</th>
-             <th class="px-4 py-2 text-left">Tgl Lahir</th>
-             <th class="px-4 py-2 text-left">JK</th>
-             <th class="px-4 py-2 text-left">Kelurahan</th>
-             <th class="px-4 py-2 text-left">RW</th>
-            </tr>
-           </thead>
-           <tbody class="divide-y">
-            <tr>
-             <td class="px-4 py-2">2024-01-15</td>
-             <td class="px-4 py-2">Budi Santoso</td>
-             <td class="px-4 py-2">1234567890123456</td>
-             <td class="px-4 py-2">1990-05-20</td>
-             <td class="px-4 py-2">Laki-laki</td>
-             <td class="px-4 py-2">Cibuntu</td>
-             <td class="px-4 py-2">01</td>
-            </tr>
-           </tbody>
-          </table>
-         </div>
-        </div>
-       </div>
-       <div class="bg-white rounded-2xl shadow-sm p-6">
-        <h3 class="font-semibold text-slate-800 mb-4">Status Upload</h3>
-        <div id="upload-status" class="space-y-2">
-         <p class="text-slate-500 text-sm">Belum ada file yang diupload</p>
-        </div>
-       </div>
-      </div>
-     </div><!-- Settings Page -->
-     <div id="page-settings" class="page hidden p-6 fade-in">
-      <div class="mb-6">
-       <h1 class="text-2xl font-bold text-slate-800">Pengaturan Target Capaian</h1>
-       <p class="text-slate-500">Kelola target CKG berdasarkan kelompok usia</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm p-6">
-       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6" id="settings-grid">
-       </div>
-       <div class="flex gap-3 mt-6"><button onclick="saveSettings()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200 flex items-center gap-2">
-         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-         </svg> Simpan Pengaturan </button> <button onclick="resetSettings()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Reset </button>
-       </div>
-      </div>
-     </div>
+     </div><!-- Wilayah Page -->
      <div id="page-wilayah" class="page hidden p-6 fade-in">
-      <div class="mb-6">
-       <h1 class="text-2xl font-bold text-slate-800">Data Wilayah</h1>
-       <p class="text-slate-500">Statistik capaian per wilayah kerja</p>
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+       <div>
+        <h1 class="text-2xl font-bold text-slate-800">Data Wilayah</h1>
+        <p class="text-slate-500">Statistik capaian per wilayah kerja</p>
+       </div><button id="btn-edit-wilayah-target" onclick="openWilayahTargetModal()" class="admin-only hidden px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg> Edit Target Kelurahan </button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="wilayah-cards">
-       <!-- Wilayah cards will be rendered here -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="wilayah-cards"><!-- Wilayah cards will be rendered here -->
       </div>
      </div><!-- Laporan Page -->
      <div id="page-laporan" class="page hidden p-6 fade-in">
@@ -358,11 +290,9 @@
        <p class="text-slate-500">Lihat laporan capaian program</p>
       </div>
       <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
-       <div class="flex flex-wrap gap-4 mb-6">
-        <button onclick="setLaporanType('harian')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-emerald-500 text-white" data-type="harian">Harian</button> <button onclick="setLaporanType('bulanan')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="bulanan">Bulanan</button> <button onclick="setLaporanType('kelurahan')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="kelurahan">Per Kelurahan</button> <button onclick="setLaporanType('rw')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="rw">Per RW</button>
+       <div class="flex flex-wrap gap-4 mb-6"><button onclick="setLaporanType('harian')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-emerald-500 text-white" data-type="harian">Harian</button> <button onclick="setLaporanType('bulanan')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="bulanan">Bulanan</button> <button onclick="setLaporanType('kelurahan')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="kelurahan">Per Kelurahan</button> <button onclick="setLaporanType('rw')" class="laporan-tab px-4 py-2 rounded-xl font-medium transition bg-slate-100 text-slate-700" data-type="rw">Per RW</button>
        </div>
-       <div id="laporan-filter" class="mb-4">
-        <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal</label> <input type="date" id="laporan-tanggal" class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+       <div id="laporan-filter" class="mb-4"><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal</label> <input type="date" id="laporan-tanggal" class="px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
        </div>
       </div>
       <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -394,8 +324,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
        <div class="bg-white rounded-2xl shadow-sm p-6">
         <h3 class="font-semibold text-slate-800 mb-4">Progres Program</h3>
-        <div class="space-y-4" id="progress-bars">
-         <!-- Progress bars will be rendered here -->
+        <div class="space-y-4" id="progress-bars"><!-- Progress bars will be rendered here -->
         </div>
        </div>
        <div class="bg-white rounded-2xl shadow-sm p-6">
@@ -423,6 +352,47 @@
         </table>
        </div>
       </div>
+     </div><!-- Upload Page -->
+     <div id="page-upload" class="page hidden p-6 fade-in">
+      <div class="mb-6">
+       <h1 class="text-2xl font-bold text-slate-800">Upload Excel</h1>
+       <p class="text-slate-500">Import data pemeriksaan massal dari file Excel sesuai format</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <h3 class="font-semibold text-slate-800">Upload File</h3><button type="button" onclick="downloadUploadTemplate()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Download Template CSV </button>
+       </div>
+       <form id="upload-form-excel" class="space-y-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">File Excel (.xlsx/.xls)</label> <input type="file" id="upload-excel-file" accept=".xlsx,.xls" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition bg-white">
+        </div>
+        <div class="flex gap-3"><button type="submit" id="btn-upload-excel" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200"> Upload &amp; Import </button>
+        </div>
+       </form>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-6">
+       <h3 class="font-semibold text-slate-800 mb-4">Format Kolom Wajib</h3>
+       <div class="overflow-x-auto">
+        <table class="w-full">
+         <thead class="bg-slate-50">
+          <tr>
+           <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Nama Kolom</th>
+           <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Contoh</th>
+           <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Keterangan</th>
+          </tr>
+         </thead>
+         <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+          <tr><td class="px-4 py-3 font-medium">tanggal_kegiatan</td><td class="px-4 py-3">2026-03-06</td><td class="px-4 py-3">Bisa format tanggal Excel</td></tr>
+          <tr><td class="px-4 py-3 font-medium">nama</td><td class="px-4 py-3">Nama Peserta</td><td class="px-4 py-3">Wajib diisi</td></tr>
+          <tr><td class="px-4 py-3 font-medium">nik</td><td class="px-4 py-3">3275xxxxxxxxxxxx</td><td class="px-4 py-3">Harus 16 digit</td></tr>
+          <tr><td class="px-4 py-3 font-medium">tanggal_lahir</td><td class="px-4 py-3">1980-12-31</td><td class="px-4 py-3">Bisa format tanggal Excel</td></tr>
+          <tr><td class="px-4 py-3 font-medium">jenis_kelamin</td><td class="px-4 py-3">Laki-laki / Perempuan</td><td class="px-4 py-3">Bisa disingkat L/P</td></tr>
+          <tr><td class="px-4 py-3 font-medium">kelurahan</td><td class="px-4 py-3">Caringin</td><td class="px-4 py-3">Harus sesuai data kelurahan</td></tr>
+          <tr><td class="px-4 py-3 font-medium">rw</td><td class="px-4 py-3">01</td><td class="px-4 py-3">Harus sesuai RW kelurahan</td></tr>
+         </tbody>
+        </table>
+       </div>
+       <p class="text-xs text-slate-500 mt-3">Kolom opsional: <span class="font-medium">konfirmasi_kehadiran</span>, <span class="font-medium">skrining_mandiri</span>, <span class="font-medium">pelayanan</span>.</p>
+      </div>
      </div><!-- Export Page -->
      <div id="page-export" class="page hidden p-6 fade-in">
       <div class="mb-6">
@@ -432,7 +402,8 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
        <div class="bg-white rounded-2xl shadow-sm p-6 card-hover cursor-pointer" onclick="exportData('excel')">
         <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
          </svg>
         </div>
         <h3 class="text-lg font-semibold text-slate-800 text-center mb-2">Export Excel</h3>
@@ -440,7 +411,8 @@
        </div>
        <div class="bg-white rounded-2xl shadow-sm p-6 card-hover cursor-pointer" onclick="exportData('pdf')">
         <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-         <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+         <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
          </svg>
         </div>
         <h3 class="text-lg font-semibold text-slate-800 text-center mb-2">Export PDF</h3>
@@ -448,7 +420,8 @@
        </div>
        <div class="bg-white rounded-2xl shadow-sm p-6 card-hover cursor-pointer" onclick="exportData('word')">
         <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
          </svg>
         </div>
         <h3 class="text-lg font-semibold text-slate-800 text-center mb-2">Export Word</h3>
@@ -458,14 +431,11 @@
       <div class="bg-white rounded-2xl shadow-sm p-6 mt-6">
        <h3 class="font-semibold text-slate-800 mb-4">Filter Export</h3>
        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Mulai</label> <input type="date" id="export-start" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Mulai</label> <input type="date" id="export-start" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Akhir</label> <input type="date" id="export-end" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Akhir</label> <input type="date" id="export-end" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
         </div>
-        <div>
-         <label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan</label> <select id="export-kelurahan" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Semua Kelurahan</option> <option value="Caringin">Caringin</option> <option value="Cibuntu">Cibuntu</option> <option value="Warung Muncang">Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan</label> <select id="export-kelurahan" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="">Semua Kelurahan</option> <option value="Caringin">Caringin</option> <option value="Cibuntu">Cibuntu</option> <option value="Warung Muncang">Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
         </div>
        </div>
       </div>
@@ -476,7 +446,8 @@
         <h1 class="text-2xl font-bold text-slate-800">Manajemen User</h1>
         <p class="text-slate-500">Kelola pengguna sistem</p>
        </div><button onclick="showAddUserModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition shadow-lg shadow-emerald-200 flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
         </svg> Tambah User </button>
       </div>
       <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -504,46 +475,32 @@
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90%] overflow-auto fade-in">
      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
       <h3 class="text-lg font-semibold text-slate-800">Edit Data Pemeriksaan</h3><button onclick="closeEditModal()" class="p-2 hover:bg-slate-100 rounded-lg transition">
-       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
        </svg></button>
      </div>
-     <form id="edit-form" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <input type="hidden" id="edit-id">
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Kegiatan</label> <input type="date" id="edit-tanggal" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+     <form id="edit-form" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4"><input type="hidden" id="edit-id">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Kegiatan</label> <input type="date" id="edit-tanggal" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label> <input type="text" id="edit-nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label> <input type="text" id="edit-nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">NIK</label> <input type="text" id="edit-nik" required maxlength="16" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">NIK</label> <input type="text" id="edit-nik" required maxlength="16" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir</label> <input type="date" id="edit-tgl-lahir" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir</label> <input type="date" id="edit-tgl-lahir" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Kelompok Usia</label> <input type="text" id="edit-kelompok-usia" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin</label> <select id="edit-jk" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Laki-laki">Laki-laki</option> <option value="Perempuan">Perempuan</option> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin</label> <select id="edit-jk" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Laki-laki">Laki-laki</option> <option value="Perempuan">Perempuan</option> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan</label> <select id="edit-kelurahan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Caringin">Kelurahan Caringin</option> <option value="Cibuntu">Kelurahan Cibuntu</option> <option value="Warung Muncang">Kelurahan Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Kelurahan</label> <select id="edit-kelurahan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Caringin">Kelurahan Caringin</option> <option value="Cibuntu">Kelurahan Cibuntu</option> <option value="Warung Muncang">Kelurahan Warung Muncang</option> <option value="Luar Wilayah">Luar Wilayah</option> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">RW</label> <select id="edit-rw" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">RW</label> <select id="edit-rw" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Konfirmasi Kehadiran</label> <select id="edit-kehadiran" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Hadir">Belum Hadir</option> <option value="Sudah Hadir">Sudah Hadir</option> <option value="Tidak Hadir">Tidak Hadir</option> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Konfirmasi Kehadiran</label> <select id="edit-kehadiran" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Hadir">Belum Hadir</option> <option value="Sudah Hadir">Sudah Hadir</option> <option value="Tidak Hadir">Tidak Hadir</option> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Skrining Mandiri</label> <select id="edit-skrining" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum">Belum</option> <option value="Lengkap">Lengkap</option> <option value="Tidak Lengkap">Tidak Lengkap</option> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Skrining Mandiri</label> <select id="edit-skrining" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum">Belum</option> <option value="Lengkap">Lengkap</option> <option value="Tidak Lengkap">Tidak Lengkap</option> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Status Pelayanan</label> <select id="edit-pelayanan" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Pemeriksaan">Belum Pemeriksaan</option> <option value="Sedang Pemeriksaan">Sedang Pemeriksaan</option> <option value="Selesai Pemeriksaan">Selesai Pemeriksaan</option> </select>
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Status Pelayanan</label> <select id="edit-pelayanan" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="Belum Pemeriksaan">Belum Pemeriksaan</option> <option value="Sedang Pemeriksaan">Sedang Pemeriksaan</option> <option value="Selesai Pemeriksaan">Selesai Pemeriksaan</option> </select>
-      </div>
-      <div class="md:col-span-2 flex gap-3 mt-4">
-       <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan Perubahan </button> <button type="button" onclick="closeEditModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
+      <div class="md:col-span-2 flex gap-3 mt-4"><button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan Perubahan </button> <button type="button" onclick="closeEditModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
       </div>
      </form>
     </div>
@@ -552,40 +509,68 @@
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md fade-in">
      <div class="p-6 text-center">
       <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-       <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+       <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
        </svg>
       </div>
       <h3 class="text-lg font-semibold text-slate-800 mb-2">Hapus Data?</h3>
       <p class="text-slate-500 mb-6">Data yang dihapus tidak dapat dikembalikan.</p>
-      <div class="flex gap-3 justify-center">
-       <button onclick="confirmDelete()" class="px-6 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition"> Ya, Hapus </button> <button onclick="closeDeleteModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
+      <div class="flex gap-3 justify-center"><button onclick="confirmDelete()" class="px-6 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition"> Ya, Hapus </button> <button onclick="closeDeleteModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
       </div>
      </div>
+    </div>
+   </div><!-- Target Modal -->
+   <div id="target-modal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md fade-in">
+     <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-slate-800">Edit Sasaran &amp; Target CKG</h3><button onclick="closeTargetModal()" class="p-2 hover:bg-slate-100 rounded-lg transition">
+       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <form id="target-form" class="p-6 space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Total Sasaran</label> <input type="number" id="target-total-sasaran" min="1" step="1" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Contoh: 15000">
+      </div>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Target CKG</label> <input type="number" id="target-total-ckg" min="1" step="1" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Contoh: 10000">
+      </div>
+      <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan </button> <button type="button" onclick="closeTargetModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
+      </div>
+     </form>
+    </div>
+   </div><!-- Wilayah Target Modal -->
+   <div id="wilayah-target-modal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg fade-in">
+     <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-slate-800">Edit Target Per Kelurahan</h3><button onclick="closeWilayahTargetModal()" class="p-2 hover:bg-slate-100 rounded-lg transition">
+       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <form id="wilayah-target-form" class="p-6 space-y-4">
+      <div id="wilayah-target-inputs" class="space-y-3"></div>
+      <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan </button> <button type="button" onclick="closeWilayahTargetModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
+      </div>
+     </form>
     </div>
    </div><!-- User Modal -->
    <div id="user-modal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md fade-in">
      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
       <h3 class="text-lg font-semibold text-slate-800" id="user-modal-title">Tambah User</h3><button onclick="closeUserModal()" class="p-2 hover:bg-slate-100 rounded-lg transition">
-       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
        </svg></button>
      </div>
-     <form id="user-form" class="p-6 space-y-4">
-      <input type="hidden" id="user-edit-index">
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Username</label> <input type="text" id="user-username" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+     <form id="user-form" class="p-6 space-y-4"><input type="hidden" id="user-edit-index">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Username</label> <input type="text" id="user-username" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label> <input type="text" id="user-nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label> <input type="text" id="user-nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Password</label> <input type="password" id="user-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Kosongkan jika tidak diubah">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Password</label> <input type="password" id="user-password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition" placeholder="Kosongkan jika tidak diubah">
       </div>
-      <div>
-       <label class="block text-sm font-medium text-slate-700 mb-1">Role</label> <select id="user-role" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="admin">Admin</option> <option value="petugas">Petugas Puskesmas</option> <option value="kepala">Kepala Puskesmas</option> </select>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Role</label> <select id="user-role" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition"> <option value="admin">Admin</option> <option value="petugas">Petugas Puskesmas</option> <option value="kepala">Kepala Puskesmas</option> </select>
       </div>
-      <div class="flex gap-3 mt-4">
-       <button type="submit" class="flex-1 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan </button> <button type="button" onclick="closeUserModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
+      <div class="flex gap-3 mt-4"><button type="submit" class="flex-1 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition"> Simpan </button> <button type="button" onclick="closeUserModal()" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition"> Batal </button>
       </div>
      </form>
     </div>
@@ -612,40 +597,20 @@
     let chartBulanan = null;
     let chartKelurahan = null;
     let chartProgress = null;
-
-    // Kelompok usia
-    const kelompokUsia = {
-      'Bayi': { range: [0, 1], icon: '👶' },
-      'Balita-Anak': { range: [1, 5], icon: '🧒' },
-      'Usia SD': { range: [5, 12], icon: '👦' },
-      'Usia SMP': { range: [12, 15], icon: '👨‍🎓' },
-      'Usia SMA': { range: [15, 18], icon: '🎓' },
-      'Dewasa 1': { range: [18, 30], icon: '👨' },
-      'Dewasa 2': { range: [30, 45], icon: '👨‍💼' },
-      'Dewasa 3': { range: [45, 60], icon: '👴' },
-      'Lansia': { range: [60, 150], icon: '👴' }
-    };
-
-    // Target setting untuk kelompok usia
-    let targetByUsia = {
-      'Bayi': 500,
-      'Balita-Anak': 800,
-      'Usia SD': 1200,
-      'Usia SMP': 900,
-      'Usia SMA': 850,
-      'Dewasa 1': 2000,
-      'Dewasa 2': 2200,
-      'Dewasa 3': 1200,
-      'Lansia': 350
-    };
+    const DASHBOARD_TARGET_STORAGE_KEY = 'ckg_dashboard_target';
+    const defaultDashboardTarget = { totalSasaran: 15000, totalTarget: 10000 };
+    let dashboardTarget = loadDashboardTarget();
+    const WILAYAH_TARGET_STORAGE_KEY = 'ckg_wilayah_target';
 
     // Wilayah data
     const wilayahData = {
-      'Caringin': { target: 3000, rw: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'] },
-      'Cibuntu': { target: 4000, rw: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15'] },
-      'Warung Muncang': { target: 2500, rw: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'] },
-      'Luar Wilayah': { target: 500, rw: ['01'] }
+      'Caringin': { target: 3000, rw: Array.from({ length: 6 }, (_, i) => String(i + 1).padStart(2, '0')) },
+      'Cibuntu': { target: 4000, rw: Array.from({ length: 10 }, (_, i) => String(i + 1).padStart(2, '0')) },
+      'Warung Muncang': { target: 2500, rw: Array.from({ length: 10 }, (_, i) => String(i + 1).padStart(2, '0')) },
+      'Luar Wilayah': { target: 500, rw: Array.from({ length: 50 }, (_, i) => String(i + 1).padStart(2, '0')) }
     };
+
+    loadWilayahTargets();
 
     // Demo users
     let users = [
@@ -655,9 +620,9 @@
     ];
 
     const rolePermissions = {
-      admin: { canInput: true, canEdit: true, canDelete: true, canViewReport: true, canManageUsers: true, canExport: true },
-      petugas: { canInput: true, canEdit: true, canDelete: false, canViewReport: true, canManageUsers: false, canExport: true },
-      kepala: { canInput: false, canEdit: true, canDelete: true, canViewReport: true, canManageUsers: false, canExport: true }
+      admin: { canInput: true, canImport: true, canEdit: true, canDelete: true, canViewReport: true, canManageUsers: true, canExport: true },
+      petugas: { canInput: true, canImport: true, canEdit: true, canDelete: false, canViewReport: true, canManageUsers: false, canExport: true },
+      kepala: { canInput: false, canImport: false, canEdit: true, canDelete: true, canViewReport: true, canManageUsers: false, canExport: true }
     };
 
     // ===== SDK INITIALIZATION =====
@@ -727,16 +692,22 @@
       document.getElementById('form-pemeriksaan').addEventListener('submit', handleFormSubmit);
       document.getElementById('edit-form').addEventListener('submit', handleEditSubmit);
       document.getElementById('user-form').addEventListener('submit', handleUserSubmit);
+      const targetForm = document.getElementById('target-form');
+      if (targetForm) targetForm.addEventListener('submit', handleTargetSubmit);
+      const wilayahTargetForm = document.getElementById('wilayah-target-form');
+      if (wilayahTargetForm) wilayahTargetForm.addEventListener('submit', handleWilayahTargetSubmit);
+      const uploadForm = document.getElementById('upload-form-excel');
+      if (uploadForm) uploadForm.addEventListener('submit', handleUploadExcelSubmit);
 
       // Auto calculate age
       document.getElementById('inp-tgl-lahir').addEventListener('change', function() {
         const age = calculateAge(this.value);
-        document.getElementById('inp-umur').value = age ? calculateDetailedAge(this.value) : '';
-        document.getElementById('inp-kelompok-usia').value = getKelompokUsia(this.value);
+        document.getElementById('inp-umur').value = age ? `${age} tahun` : '';
       });
 
       document.getElementById('edit-tgl-lahir').addEventListener('change', function() {
-        document.getElementById('edit-kelompok-usia').value = getKelompokUsia(this.value);
+        const age = calculateAge(this.value);
+        // Age is calculated but stored as number in data
       });
 
       // Kelurahan change - update RW options
@@ -774,48 +745,6 @@
       return age;
     }
 
-    function calculateDetailedAge(birthDate) {
-      if (!birthDate) return '0 tahun';
-      const today = new Date();
-      const birth = new Date(birthDate);
-      
-      let years = today.getFullYear() - birth.getFullYear();
-      let months = today.getMonth() - birth.getMonth();
-      let days = today.getDate() - birth.getDate();
-      
-      if (days < 0) {
-        months--;
-        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-        days += prevMonth.getDate();
-      }
-      
-      if (months < 0) {
-        years--;
-        months += 12;
-      }
-      
-      if (years > 0) {
-        return `${years} tahun${months > 0 ? ` ${months} bln` : ''}`;
-      } else if (months > 0) {
-        return `${months} bulan${days > 0 ? ` ${days} hari` : ''}`;
-      } else {
-        return `${days} hari`;
-      }
-    }
-
-    function getKelompokUsia(birthDate) {
-      if (!birthDate) return '-';
-      const age = calculateAge(birthDate);
-      
-      for (const [group, info] of Object.entries(kelompokUsia)) {
-        const [min, max] = info.range;
-        if (age >= min && age < max) {
-          return group;
-        }
-      }
-      return 'Lansia';
-    }
-
     function updateRWOptions(kelurahan, selectId) {
       const select = document.getElementById(selectId);
       select.innerHTML = '<option value="">Pilih RW</option>';
@@ -847,6 +776,62 @@
       return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
+    function loadDashboardTarget() {
+      try {
+        const savedTarget = localStorage.getItem(DASHBOARD_TARGET_STORAGE_KEY);
+        if (!savedTarget) return { ...defaultDashboardTarget };
+        const parsed = JSON.parse(savedTarget);
+        const totalSasaran = Number(parsed.totalSasaran);
+        const totalTarget = Number(parsed.totalTarget);
+
+        if (!Number.isFinite(totalSasaran) || totalSasaran <= 0 || !Number.isFinite(totalTarget) || totalTarget <= 0) {
+          return { ...defaultDashboardTarget };
+        }
+
+        return {
+          totalSasaran: Math.round(totalSasaran),
+          totalTarget: Math.round(totalTarget)
+        };
+      } catch (error) {
+        return { ...defaultDashboardTarget };
+      }
+    }
+
+    function saveDashboardTarget() {
+      try {
+        localStorage.setItem(DASHBOARD_TARGET_STORAGE_KEY, JSON.stringify(dashboardTarget));
+      } catch (error) {
+        console.warn('Gagal menyimpan target dashboard', error);
+      }
+    }
+
+    function loadWilayahTargets() {
+      try {
+        const savedTarget = localStorage.getItem(WILAYAH_TARGET_STORAGE_KEY);
+        if (!savedTarget) return;
+        const parsed = JSON.parse(savedTarget);
+
+        Object.keys(wilayahData).forEach(kelurahan => {
+          const target = Number(parsed[kelurahan]);
+          if (Number.isFinite(target) && target > 0) {
+            wilayahData[kelurahan].target = Math.round(target);
+          }
+        });
+      } catch (error) {
+        console.warn('Gagal memuat target kelurahan', error);
+      }
+    }
+
+    function saveWilayahTargets() {
+      try {
+        const payload = Object.fromEntries(
+          Object.keys(wilayahData).map(kelurahan => [kelurahan, wilayahData[kelurahan].target])
+        );
+        localStorage.setItem(WILAYAH_TARGET_STORAGE_KEY, JSON.stringify(payload));
+      } catch (error) {
+        console.warn('Gagal menyimpan target kelurahan', error);
+      }
+    }
     // ===== AUTH FUNCTIONS =====
     function handleLogin() {
       const username = document.getElementById('login-username').value;
@@ -875,6 +860,11 @@
           inputBtn.style.display = rolePermissions[user.role].canInput ? 'flex' : 'none';
         }
 
+        const uploadBtn = document.querySelector('[data-page="upload"]');
+        if (uploadBtn) {
+          uploadBtn.style.display = rolePermissions[user.role].canImport ? 'flex' : 'none';
+        }
+
         showPage('dashboard');
         showToast(`Selamat datang, ${user.nama}!`);
       } else {
@@ -889,6 +879,8 @@
       document.getElementById('main-app').classList.remove('flex');
       document.getElementById('login-username').value = '';
       document.getElementById('login-password').value = '';
+      closeTargetModal();
+      closeWilayahTargetModal();
     }
 
     function getRoleLabel(role) {
@@ -947,7 +939,6 @@
         nik: document.getElementById('inp-nik').value,
         tanggal_lahir: birthDate,
         umur: age,
-        kelompok_usia: getKelompokUsia(birthDate),
         jenis_kelamin: document.getElementById('inp-jk').value,
         kelurahan: document.getElementById('inp-kelurahan').value,
         rw: document.getElementById('inp-rw').value,
@@ -979,6 +970,290 @@
       document.getElementById('inp-umur').value = '';
       document.getElementById('inp-rw').innerHTML = '<option value="">Pilih RW</option>';
     }
+    function downloadUploadTemplate() {
+      const headers = [
+        'tanggal_kegiatan',
+        'nama',
+        'nik',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'kelurahan',
+        'rw',
+        'konfirmasi_kehadiran',
+        'skrining_mandiri',
+        'pelayanan'
+      ];
+
+      const sample = [
+        '2026-03-06',
+        'Nama Peserta',
+        '3275000000000001',
+        '1980-12-31',
+        'Laki-laki',
+        'Caringin',
+        '01',
+        'Sudah Hadir',
+        'Lengkap',
+        'Selesai Pemeriksaan'
+      ];
+
+      const csv = [headers, sample].map(row => row.join(',')).join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'Template_Upload_CKG.csv';
+      link.click();
+    }
+
+    function formatDateToISO(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function normalizeExcelDate(value) {
+      if (value === null || value === undefined || value === '') return '';
+
+      if (value instanceof Date && !Number.isNaN(value.getTime())) {
+        return formatDateToISO(value);
+      }
+
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        if (typeof XLSX !== 'undefined' && XLSX.SSF && XLSX.SSF.parse_date_code) {
+          const parsed = XLSX.SSF.parse_date_code(value);
+          if (parsed && parsed.y && parsed.m && parsed.d) {
+            const y = String(parsed.y).padStart(4, '0');
+            const m = String(parsed.m).padStart(2, '0');
+            const d = String(parsed.d).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+          }
+        }
+
+        const utcDays = Math.floor(value - 25569);
+        const utcValue = utcDays * 86400;
+        const date = new Date(utcValue * 1000);
+        if (!Number.isNaN(date.getTime())) return formatDateToISO(date);
+      }
+
+      const raw = String(value).trim();
+      if (!raw) return '';
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+
+      const dmy = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const day = dmy[1].padStart(2, '0');
+        const month = dmy[2].padStart(2, '0');
+        return `${dmy[3]}-${month}-${day}`;
+      }
+
+      const parsed = new Date(raw);
+      if (!Number.isNaN(parsed.getTime())) return formatDateToISO(parsed);
+
+      return '';
+    }
+
+    function normalizeRowKeys(row) {
+      const normalized = {};
+      Object.keys(row).forEach(key => {
+        const normKey = String(key).toLowerCase().trim().replace(/\s+/g, '_');
+        normalized[normKey] = row[key];
+      });
+      return normalized;
+    }
+
+    function getValueFromAliases(obj, aliases, fallback = '') {
+      for (const key of aliases) {
+        if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== '') {
+          return obj[key];
+        }
+      }
+      return fallback;
+    }
+
+    function normalizeKelurahan(value) {
+      const text = String(value || '').trim().toLowerCase();
+      if (!text) return '';
+
+      const map = Object.keys(wilayahData).reduce((acc, key) => {
+        acc[key.toLowerCase()] = key;
+        acc[`kelurahan ${key.toLowerCase()}`] = key;
+        return acc;
+      }, {});
+
+      return map[text] || '';
+    }
+
+    function normalizeRw(value) {
+      const digits = String(value || '').replace(/\D/g, '');
+      if (!digits) return '';
+      return String(parseInt(digits, 10)).padStart(2, '0');
+    }
+
+    function normalizeJenisKelamin(value) {
+      const text = String(value || '').trim().toLowerCase();
+      if (!text) return '';
+      if (text === 'l' || text.startsWith('laki')) return 'Laki-laki';
+      if (text === 'p' || text.startsWith('per')) return 'Perempuan';
+      return '';
+    }
+
+    function normalizeKehadiran(value) {
+      const text = String(value || '').trim().toLowerCase();
+      if (text.includes('sudah')) return 'Sudah Hadir';
+      if (text.includes('tidak')) return 'Tidak Hadir';
+      return 'Belum Hadir';
+    }
+
+    function normalizeSkrining(value) {
+      const text = String(value || '').trim().toLowerCase();
+      if (text.includes('lengkap') && !text.includes('tidak')) return 'Lengkap';
+      if (text.includes('tidak')) return 'Tidak Lengkap';
+      return 'Belum';
+    }
+
+    function normalizePelayanan(value) {
+      const text = String(value || '').trim().toLowerCase();
+      if (text.includes('selesai')) return 'Selesai Pemeriksaan';
+      if (text.includes('sedang')) return 'Sedang Pemeriksaan';
+      return 'Belum Pemeriksaan';
+    }
+
+    function normalizeNik(value) {
+      if (value === null || value === undefined) return '';
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        return Math.trunc(value).toString();
+      }
+      return String(value).replace(/\D/g, '');
+    }
+
+    function parseExcelRowsToRecords(rows) {
+      const records = [];
+      const errors = [];
+
+      rows.forEach((row, index) => {
+        const rowNumber = index + 2;
+        const data = normalizeRowKeys(row);
+
+        const tanggalKegiatan = normalizeExcelDate(getValueFromAliases(data, ['tanggal_kegiatan', 'tanggal', 'tgl_kegiatan']));
+        const nama = String(getValueFromAliases(data, ['nama', 'nama_lengkap'], '')).trim();
+        const nik = normalizeNik(getValueFromAliases(data, ['nik'], ''));
+        const tanggalLahir = normalizeExcelDate(getValueFromAliases(data, ['tanggal_lahir', 'tgl_lahir']));
+        const jenisKelamin = normalizeJenisKelamin(getValueFromAliases(data, ['jenis_kelamin', 'jk']));
+        const kelurahan = normalizeKelurahan(getValueFromAliases(data, ['kelurahan']));
+        const rw = normalizeRw(getValueFromAliases(data, ['rw']));
+
+        if (!tanggalKegiatan || !nama || !nik || !tanggalLahir || !jenisKelamin || !kelurahan || !rw) {
+          errors.push(`Baris ${rowNumber}: kolom wajib belum lengkap.`);
+          return;
+        }
+
+        if (nik.length !== 16) {
+          errors.push(`Baris ${rowNumber}: NIK harus 16 digit.`);
+          return;
+        }
+
+        if (!wilayahData[kelurahan].rw.includes(rw)) {
+          errors.push(`Baris ${rowNumber}: RW ${rw} tidak valid untuk ${kelurahan}.`);
+          return;
+        }
+
+        const umur = calculateAge(tanggalLahir);
+        records.push({
+          type: 'pemeriksaan',
+          tanggal_kegiatan: tanggalKegiatan,
+          nama,
+          nik,
+          tanggal_lahir: tanggalLahir,
+          umur,
+          jenis_kelamin: jenisKelamin,
+          kelurahan,
+          rw,
+          konfirmasi_kehadiran: normalizeKehadiran(getValueFromAliases(data, ['konfirmasi_kehadiran', 'kehadiran'])),
+          skrining_mandiri: normalizeSkrining(getValueFromAliases(data, ['skrining_mandiri', 'skrining'])),
+          pelayanan: normalizePelayanan(getValueFromAliases(data, ['pelayanan', 'status_pelayanan'])),
+          created_at: new Date().toISOString()
+        });
+      });
+
+      return { records, errors };
+    }
+
+    async function handleUploadExcelSubmit(e) {
+      e.preventDefault();
+
+      if (!rolePermissions[currentUser?.role]?.canImport) {
+        showToast('Anda tidak memiliki akses upload data', 'error');
+        return;
+      }
+
+      if (typeof XLSX === 'undefined') {
+        showToast('Library Excel tidak tersedia', 'error');
+        return;
+      }
+
+      const fileInput = document.getElementById('upload-excel-file');
+      const button = document.getElementById('btn-upload-excel');
+      const file = fileInput?.files?.[0];
+
+      if (!file) {
+        showToast('Pilih file Excel terlebih dahulu', 'error');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Memproses...';
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+
+        if (!rows.length) {
+          showToast('File Excel kosong', 'error');
+          return;
+        }
+
+        const { records, errors } = parseExcelRowsToRecords(rows);
+
+        if (!records.length) {
+          showToast(errors[0] || 'Tidak ada data valid untuk diimport', 'error');
+          return;
+        }
+
+        const availableSlots = Math.max(0, 999 - allData.length);
+        if (availableSlots <= 0) {
+          showToast('Batas maksimum 999 data tercapai!', 'error');
+          return;
+        }
+
+        const importRecords = records.slice(0, availableSlots);
+        let success = 0;
+        let failed = 0;
+
+        for (const record of importRecords) {
+          const result = await window.dataSdk.create(record);
+          if (result.isOk) success++;
+          else failed++;
+        }
+
+        const skippedByLimit = records.length - importRecords.length;
+        let message = `Upload selesai: ${success} berhasil`;
+        if (failed) message += `, ${failed} gagal`;
+        if (errors.length) message += `, ${errors.length} baris tidak valid`;
+        if (skippedByLimit > 0) message += `, ${skippedByLimit} dilewati (batas 999 data)`;
+
+        showToast(message, failed || errors.length ? 'warning' : 'success');
+        fileInput.value = '';
+      } catch (error) {
+        console.error(error);
+        showToast('Gagal membaca file Excel', 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Upload & Import';
+      }
+    }
 
     // ===== DATA TABLE =====
     function renderDataTable() {
@@ -1005,7 +1280,6 @@
           <td class="px-4 py-3 text-sm font-medium">${d.nama || '-'}</td>
           <td class="px-4 py-3 text-sm font-mono">${d.nik || '-'}</td>
           <td class="px-4 py-3 text-sm">${d.umur || '-'} th</td>
-          <td class="px-4 py-3 text-sm text-slate-500"><span class="px-2 py-0.5 rounded text-xs bg-slate-100">${d.kelompok_usia || '-'}</span></td>
           <td class="px-4 py-3 text-sm">${d.jenis_kelamin === 'Laki-laki' ? 'L' : 'P'}</td>
           <td class="px-4 py-3 text-sm">${d.kelurahan || '-'}</td>
           <td class="px-4 py-3 text-sm">${d.rw || '-'}</td>
@@ -1119,10 +1393,101 @@
       }
     }
 
+    function openTargetModal() {
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast('Hanya admin yang dapat mengubah sasaran dan target', 'error');
+        return;
+      }
+
+      document.getElementById('target-total-sasaran').value = dashboardTarget.totalSasaran;
+      document.getElementById('target-total-ckg').value = dashboardTarget.totalTarget;
+      document.getElementById('target-modal').classList.remove('hidden');
+    }
+
+    function closeTargetModal() {
+      document.getElementById('target-modal').classList.add('hidden');
+    }
+
+    function handleTargetSubmit(e) {
+      e.preventDefault();
+
+      const totalSasaran = Number(document.getElementById('target-total-sasaran').value);
+      const totalTarget = Number(document.getElementById('target-total-ckg').value);
+
+      if (!Number.isFinite(totalSasaran) || totalSasaran <= 0 || !Number.isFinite(totalTarget) || totalTarget <= 0) {
+        showToast('Total sasaran dan target harus berupa angka lebih dari 0', 'error');
+        return;
+      }
+
+      dashboardTarget = {
+        totalSasaran: Math.round(totalSasaran),
+        totalTarget: Math.round(totalTarget)
+      };
+
+      saveDashboardTarget();
+      closeTargetModal();
+      updateDashboard();
+      renderMonitoring();
+      showToast('Total sasaran dan target CKG berhasil diperbarui');
+    }
+
+    function renderWilayahTargetForm() {
+      const container = document.getElementById('wilayah-target-inputs');
+      if (!container) return;
+
+      container.innerHTML = Object.keys(wilayahData).map(kelurahan => `
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">${kelurahan}</label>
+          <input type="number" min="1" step="1" required data-kelurahan="${kelurahan}" value="${wilayahData[kelurahan].target}" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 transition">
+        </div>
+      `).join('');
+    }
+
+    function openWilayahTargetModal() {
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast('Hanya admin yang dapat mengubah target per kelurahan', 'error');
+        return;
+      }
+
+      renderWilayahTargetForm();
+      document.getElementById('wilayah-target-modal').classList.remove('hidden');
+    }
+
+    function closeWilayahTargetModal() {
+      document.getElementById('wilayah-target-modal').classList.add('hidden');
+    }
+
+    function handleWilayahTargetSubmit(e) {
+      e.preventDefault();
+
+      const inputs = document.querySelectorAll('#wilayah-target-inputs input[data-kelurahan]');
+      if (!inputs.length) return;
+
+      for (const input of inputs) {
+        const value = Number(input.value);
+        if (!Number.isFinite(value) || value <= 0) {
+          showToast('Semua target kelurahan harus berupa angka lebih dari 0', 'error');
+          return;
+        }
+      }
+
+      inputs.forEach(input => {
+        const kelurahan = input.dataset.kelurahan;
+        wilayahData[kelurahan].target = Math.round(Number(input.value));
+      });
+
+      saveWilayahTargets();
+      closeWilayahTargetModal();
+      renderWilayahCards();
+      renderLaporan();
+      renderMonitoring();
+      showToast('Target per kelurahan berhasil diperbarui');
+    }
+
     // ===== DASHBOARD =====
     function updateDashboard() {
-      const totalSasaran = 15000;
-      const totalTarget = 10000;
+      const totalSasaran = dashboardTarget.totalSasaran;
+      const totalTarget = dashboardTarget.totalTarget;
       const realisasi = allData.filter(d => d.pelayanan === 'Selesai Pemeriksaan').length;
       const persentase = totalTarget > 0 ? ((realisasi / totalTarget) * 100).toFixed(1) : 0;
 
@@ -1385,7 +1750,7 @@
       // Progress chart
       if (chartProgress) chartProgress.destroy();
       const ctx = document.getElementById('chart-progress').getContext('2d');
-      const totalTarget = 10000;
+      const totalTarget = dashboardTarget.totalTarget;
       const totalRealisasi = allData.filter(d => d.pelayanan === 'Selesai Pemeriksaan').length;
       const sisa = totalTarget - totalRealisasi;
 
@@ -1618,6 +1983,13 @@
     // Initialize app
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d7f0a949461fd9a',t:'MTc3Mjc3NTc5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d7ef60674a28354',t:'MTc3Mjc3NDk0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
+
+
+
+
+
+
+
